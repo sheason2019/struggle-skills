@@ -1,6 +1,6 @@
 ---
 name: struggle-cli-basics
-description: Shared baseline rules for Struggle CLI workflows across remotes and workspace resources. Use when any task touches `struggle remote ...` or `struggle goal|skill|experience|worklog|handbook|proposal ...`, when validating JSON/error contracts, or when clarifying the difference between workspace `skill` resources and local `struggle-skills/.../SKILL.md` files.
+description: Shared baseline rules for Struggle CLI workflows across remotes and workspace resources. Use when any task touches `struggle remote ...` or `struggle wiki|worklog|handbook ...`, when validating JSON/error contracts, or when clarifying the difference between workspace `wiki` resources and local `struggle-skills/.../SKILL.md` files.
 ---
 
 # struggle-cli-basics
@@ -13,7 +13,7 @@ description: Shared baseline rules for Struggle CLI workflows across remotes and
 
 - `remoteName`
 - `workspaceId`（资源命令需要）
-- `resourceType`（`goal|skill|experience|worklog|handbook|proposal`）
+- `resourceType`（`wiki|worklog|handbook`）
 
 ## Command patterns
 
@@ -25,6 +25,9 @@ struggle remote show <name> [--json]
 # resource read
 struggle <resource> list --remote <remoteName> --workspace <workspaceName> [--json]
 struggle <resource> get <id> --remote <remoteName> --workspace <workspaceName> [--json]
+
+# extra read for wiki tree
+struggle wiki tree --remote <remoteName> --workspace <workspaceName> [--json]
 
 # resource write
 struggle <resource> create ... --remote <remoteName> --workspace <workspaceName> [--json]
@@ -45,7 +48,7 @@ struggle <resource> delete <id> --remote <remoteName> --workspace <workspaceName
 ## Common mistakes to avoid
 
 - 概念混淆：
-  - `struggle skill ...` 是 workspace 业务资源命令。
+  - `struggle wiki ...` 是 workspace 文档资源命令。
   - `struggle-skills/.../SKILL.md` 是本地 agent skill 文件。
 - 资源命令漏传 `--remote` 或 `--workspace`。
 - update 漏传 `--revision`。
@@ -58,21 +61,17 @@ struggle <resource> delete <id> --remote <remoteName> --workspace <workspaceName
 ## Examples
 
 ```bash
-struggle goal list --remote prod --workspace design-workspace --json
+struggle wiki tree --remote prod --workspace design-workspace --json
 ```
 
 ```bash
-struggle skill get sk_123 --remote prod --workspace design-workspace --json
+struggle wiki get wk_123 --remote prod --workspace design-workspace --json
 ```
 
 ```bash
-struggle experience update exp_9 --revision 4 --content-file ./exp.md --remote prod --workspace design-workspace --json
+struggle worklog update wl_9 --revision 4 --content-file ./worklog.md --remote prod --workspace design-workspace --json
 ```
 
 ```bash
 struggle handbook get hb_42 --remote prod --workspace design-workspace --json
-```
-
-```bash
-struggle proposal list --remote prod --workspace design-workspace --json
 ```

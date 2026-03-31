@@ -13,7 +13,7 @@ description: Clean up workspace records through safe delete or archive-oriented 
 
 - `remoteName`
 - `workspaceId`
-- 资源类型与 `recordId`
+- 资源类型与 `recordId`（`wiki|worklog|handbook`）
 - 清理策略：直接删除，或改状态到 `archived`
 
 ## Command patterns
@@ -38,29 +38,30 @@ struggle <resource> list --remote <remoteName> --workspace <workspaceName> [--js
 2. 判断删除还是状态收口：
    - 需要保留历史时优先 `status=archived`。
    - 明确无需保留时再 `delete`。
-3. 执行操作并使用 `--json` 获取结构化结果。
-4. 删除后用 `list/get` 复核结果。
-5. 把清理结果回报给用户（删除了什么、剩余什么）。
+3. 对 wiki 节点先检查是否有子节点，避免误删树结构。
+4. 执行操作并使用 `--json` 获取结构化结果。
+5. 删除后用 `list/get` 复核结果。
+6. 把清理结果回报给用户（删除了什么、剩余什么）。
 
 ## Common mistakes to avoid
 
-- 未确认资源类型就直接删（例如把 skill id 当 goal id）。
+- 未确认资源类型就直接删。
 - 在错误 workspace 下执行 delete。
 - 删除前未让用户确认是否允许保留为 archived。
+- 删除 wiki 父节点前不检查子节点。
 - 删除后不做验证。
-- 忽略 `delete --json` 的标准返回 `{ deleted: true, id }`。
 
 ## Examples
 
 ```bash
 # 直接删除
-struggle experience get exp_77 --remote prod --workspace design-workspace --json
-struggle experience delete exp_77 --remote prod --workspace design-workspace --json
-struggle experience list --remote prod --workspace design-workspace --json
+struggle worklog get wl_77 --remote prod --workspace design-workspace --json
+struggle worklog delete wl_77 --remote prod --workspace design-workspace --json
+struggle worklog list --remote prod --workspace design-workspace --json
 ```
 
 ```bash
 # 收口而非删除
-struggle goal get g_2 --remote prod --workspace design-workspace --json
-struggle goal update g_2 --revision 11 --status archived --content-file ./notes/g2-archive.md --remote prod --workspace design-workspace --json
+struggle wiki get wk_2 --remote prod --workspace design-workspace --json
+struggle wiki update wk_2 --revision 11 --status archived --content-file ./notes/wk2-archive.md --remote prod --workspace design-workspace --json
 ```

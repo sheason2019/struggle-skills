@@ -1,6 +1,6 @@
 ---
 name: struggle-cli-read-workspace-context
-description: Read workspace context from goals, skills, experiences, worklogs, handbooks, and proposals before analysis or write actions. Use when summarizing current state, checking whether a record exists, collecting revision values for updates, or grounding recommendations in actual workspace data.
+description: Read workspace context from wikis, worklogs, and handbooks before analysis or write actions. Use when summarizing current state, checking whether a record exists, collecting revision values for updates, or grounding recommendations in actual workspace data.
 ---
 
 # struggle-cli-read-workspace-context
@@ -19,50 +19,46 @@ description: Read workspace context from goals, skills, experiences, worklogs, h
 
 ```bash
 # list
-struggle goal list --remote <remoteName> --workspace <workspaceName> [--json]
-struggle skill list --remote <remoteName> --workspace <workspaceName> [--json]
-struggle experience list --remote <remoteName> --workspace <workspaceName> [--json]
+struggle wiki list --remote <remoteName> --workspace <workspaceName> [--json]
 struggle worklog list --remote <remoteName> --workspace <workspaceName> [--json]
 struggle handbook list --remote <remoteName> --workspace <workspaceName> [--json]
-struggle proposal list --remote <remoteName> --workspace <workspaceName> [--json]
+
+# tree
+struggle wiki tree --remote <remoteName> --workspace <workspaceName> [--json]
 
 # get
-struggle goal get <goalId> --remote <remoteName> --workspace <workspaceName> [--json]
-struggle skill get <skillId> --remote <remoteName> --workspace <workspaceName> [--json]
-struggle experience get <experienceId> --remote <remoteName> --workspace <workspaceName> [--json]
+struggle wiki get <wikiId> --remote <remoteName> --workspace <workspaceName> [--json]
 struggle worklog get <worklogId> --remote <remoteName> --workspace <workspaceName> [--json]
 struggle handbook get <handbookId> --remote <remoteName> --workspace <workspaceName> [--json]
-struggle proposal get <proposalId> --remote <remoteName> --workspace <workspaceName> [--json]
 ```
 
 ## Workflow
 
 1. 先确认 remote。
-2. 按任务范围读取列表（单资源或六类资源全读）。
-3. 锁定目标记录后执行 `get` 读取完整内容。
-4. 程序化分析或后续自动流程使用 `--json`。
-5. 把读取结论作为后续 create/update/delete 的唯一依据。
+2. 按任务范围读取列表（单资源或三类资源全读）。
+3. 需要理解知识结构时优先读取 `wiki tree`。
+4. 锁定目标记录后执行 `get` 读取完整内容。
+5. 程序化分析或后续自动流程使用 `--json`。
+6. 把读取结论作为后续 create/update/delete 的唯一依据。
 
 ## Common mistakes to avoid
 
 - 只读一条记录就下全局结论，跳过列表上下文。
 - 写操作前不读取目标记录详情。
 - 忘记 `--json` 导致解析不稳定。
-- 混入不存在的隐式上下文机制（当前需要显式 remote/workspace）。
+- 跳过 `wiki tree`，导致父子节点关系理解错误。
 
 ## Examples
 
 ```bash
-struggle goal list --remote prod --workspace design-workspace --json
-struggle skill list --remote prod --workspace design-workspace --json
-struggle experience list --remote prod --workspace design-workspace --json
+struggle wiki tree --remote prod --workspace design-workspace --json
+struggle wiki list --remote prod --workspace design-workspace --json
 struggle worklog list --remote prod --workspace design-workspace --json
 struggle handbook list --remote prod --workspace design-workspace --json
-struggle proposal list --remote prod --workspace design-workspace --json
 ```
 
 ```bash
-struggle worklog get wl_1024 --remote prod --workspace design-workspace --json
+struggle wiki get wk_2048 --remote prod --workspace design-workspace --json
 ```
 
 ```bash

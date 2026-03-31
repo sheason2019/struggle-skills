@@ -1,6 +1,6 @@
 ---
 name: struggle-cli-update-workspace-record
-description: Update existing workspace records safely under optimistic concurrency constraints. Use when changing title/status/tags/content/logged-at for goal/skill/experience/worklog/handbook/proposal records and you must fetch latest revision before issuing `update --revision`.
+description: Update existing workspace records safely under optimistic concurrency constraints. Use when changing title/status/tags/content/logged-at for wiki/worklog/handbook records and you must fetch latest revision before issuing `update --revision`.
 ---
 
 # struggle-cli-update-workspace-record
@@ -16,7 +16,9 @@ description: Update existing workspace records safely under optimistic concurren
 - 资源类型与 `recordId`
 - 最新 `revision`
 - 新正文（`--content` 或 `--content-file`）
-- 可选：`--title`、`--status`、`--tag`（worklog 还可 `--logged-at`）
+- 可选：`--title`、`--status`、`--tag`
+- `worklog` 可选：`--logged-at`
+- `wiki` 可选：`--parent-id`、`--sort-order`
 
 ## Command patterns
 
@@ -25,7 +27,7 @@ struggle <resource> get <id> --remote <remoteName> --workspace <workspaceName> -
 ```
 
 ```bash
-# goal/skill/experience/handbook/proposal
+# handbook/worklog/wiki generic update
 struggle <resource> update <id> \
   --revision <n> \
   (--content <text> | --content-file <path>) \
@@ -34,11 +36,20 @@ struggle <resource> update <id> \
 ```
 
 ```bash
-# worklog
+# worklog extra field
 struggle worklog update <id> \
   --revision <n> \
   (--content <text> | --content-file <path>) \
   [--title <title>] [--status <draft|active|archived>] [--logged-at <datetime>] [--tag <tag>]... \
+  --remote <remoteName> --workspace <workspaceName> [--json]
+```
+
+```bash
+# wiki tree adjustment
+struggle wiki update <id> \
+  --revision <n> \
+  (--content <text> | --content-file <path>) \
+  [--title <title>] [--status <draft|active|archived>] [--parent-id <wikiId>] [--sort-order <number>] [--tag <tag>]... \
   --remote <remoteName> --workspace <workspaceName> [--json]
 ```
 
@@ -57,17 +68,19 @@ struggle worklog update <id> \
 - update 漏传 `--revision`。
 - update 不传正文（当前命令要求正文输入）。
 - revision 冲突后直接重试旧命令而不先刷新记录。
-- 在错误 workspace 下更新到同名 id。
+- wiki 调整节点时忘记同步 `sort-order`，导致顺序错乱。
 
 ## Examples
 
 ```bash
-struggle goal get g_1 --remote prod --workspace design-workspace --json
-struggle goal update g_1 \
+struggle wiki get wk_1 --remote prod --workspace design-workspace --json
+struggle wiki update wk_1 \
   --revision 8 \
-  --title "Q2 发布质量门禁（修订）" \
+  --title "登录模块知识地图（修订）" \
   --status active \
-  --content-file ./notes/goal-q2-gate-v2.md \
+  --parent-id wk_auth \
+  --sort-order 30 \
+  --content-file ./notes/wiki-auth-map-v2.md \
   --remote prod \
   --workspace design-workspace \
   --json
@@ -91,17 +104,6 @@ struggle handbook update hb_42 \
   --title "工程规范手册 v2" \
   --status active \
   --content-file ./notes/handbook-eng-v2.md \
-  --remote prod \
-  --workspace design-workspace \
-  --json
-```
-
-```bash
-struggle proposal get p_17 --remote prod --workspace design-workspace --json
-struggle proposal update p_17 \
-  --revision 2 \
-  --status active \
-  --content-file ./notes/proposal-auth-refactor-v2.md \
   --remote prod \
   --workspace design-workspace \
   --json
