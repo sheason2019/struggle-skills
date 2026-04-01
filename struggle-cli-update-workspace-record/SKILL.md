@@ -1,6 +1,6 @@
 ---
 name: struggle-cli-update-workspace-record
-description: Update existing workspace records safely under optimistic concurrency constraints. Use when changing title, status, tags, content, or wiki placement for wiki or handbook records and you must fetch latest revision before issuing `update --revision`.
+description: Update workspace wiki records safely under optimistic concurrency constraints. Use when changing title, status, tags, content, or wiki placement and you must fetch the latest revision before issuing `update --revision`.
 ---
 
 # struggle-cli-update-workspace-record
@@ -22,20 +22,11 @@ description: Update existing workspace records safely under optimistic concurren
 ## Command patterns
 
 ```bash
-struggle <resource> get <id> --remote <remoteName> --workspace <workspaceName> --json
+struggle wiki get <id> --remote <remoteName> --workspace <workspaceName> --json
 ```
 
 ```bash
-# handbook/wiki generic update
-struggle <resource> update <id> \
-  --revision <n> \
-  (--content <text> | --content-file <path>) \
-  [--title <title>] [--status <draft|active|archived>] [--tag <tag>]... \
-  --remote <remoteName> --workspace <workspaceName> [--json]
-```
-
-```bash
-# wiki tree adjustment
+# wiki update
 struggle wiki update <id> \
   --revision <n> \
   (--content <text> | --content-file <path>) \
@@ -73,18 +64,6 @@ struggle wiki update wk_1 \
   --parent-id wk_auth \
   --sort-order 30 \
   --content-file ./notes/wiki-auth-map-v2.md \
-  --remote prod \
-  --workspace design-workspace \
-  --json
-```
-
-```bash
-struggle handbook get hb_42 --remote prod --workspace design-workspace --json
-struggle handbook update hb_42 \
-  --revision 6 \
-  --title "工程规范手册 v2" \
-  --status active \
-  --content-file ./notes/handbook-eng-v2.md \
   --remote prod \
   --workspace design-workspace \
   --json

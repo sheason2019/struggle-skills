@@ -13,28 +13,28 @@ description: Clean up workspace records through safe delete or archive-oriented 
 
 - `remoteName`
 - `workspaceName`
-- 资源类型与 `recordId`（`wiki|handbook`）
+- 资源类型与 `recordId`（当前为 `wiki`）
 - 清理策略：直接删除，或改状态到 `archived`
 
 ## Command patterns
 
 ```bash
 # 删除
-struggle <resource> delete <id> --remote <remoteName> --workspace <workspaceName> [--json]
+struggle wiki delete <id> --remote <remoteName> --workspace <workspaceName> [--json]
 
 # 非删除收口（推荐先考虑）
-struggle <resource> update <id> --revision <n> --status archived --content-file <path> --remote <remoteName> --workspace <workspaceName> [--json]
+struggle wiki update <id> --revision <n> --status archived --content-file <path> --remote <remoteName> --workspace <workspaceName> [--json]
 ```
 
 ```bash
 # 删除后验证
-struggle <resource> get <id> --remote <remoteName> --workspace <workspaceName> [--json]
-struggle <resource> list --remote <remoteName> --workspace <workspaceName> [--json]
+struggle wiki get <id> --remote <remoteName> --workspace <workspaceName> [--json]
+struggle wiki list --remote <remoteName> --workspace <workspaceName> [--json]
 ```
 
 ## Workflow
 
-1. 先 `get` 目标记录，确认资源类型、id、workspace 正确。
+1. 先 `get` 目标记录，确认 `wiki` 类型、id、workspace 正确。
 2. 判断删除还是状态收口：
    - 需要保留历史时优先 `status=archived`。
    - 明确无需保留时再 `delete`。
@@ -63,7 +63,7 @@ struggle wiki update wk_2 --revision 11 --status archived --content-file ./notes
 
 ```bash
 # 直接删除
-struggle handbook get hb_77 --remote prod --workspace design-workspace --json
-struggle handbook delete hb_77 --remote prod --workspace design-workspace --json
-struggle handbook list --remote prod --workspace design-workspace --json
+struggle wiki get wk_77 --remote prod --workspace design-workspace --json
+struggle wiki delete wk_77 --remote prod --workspace design-workspace --json
+struggle wiki list --remote prod --workspace design-workspace --json
 ```

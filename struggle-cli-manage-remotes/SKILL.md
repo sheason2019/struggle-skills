@@ -31,7 +31,7 @@ struggle remote remove <name> (--global|--project) [--json]
 2. 如要使用某个 remote，先 `remote show <name>` 核对 URL/sourceScope/tokenMasked。
 3. 不存在则 `remote add`，并显式选择 `--global` 或 `--project`。
 4. 新增后再次 `remote show` 验证。
-5. remote 可用后，优先进入 handbook-first onboarding，而不是直接写 workspace 内容。
+5. remote 可用后，优先读取 workspace 的 wiki 树与关键节点，再进入后续写操作。
 6. 仅在确认不再需要时执行 `remote remove`，再 `remote list` 复核。
 
 ## Common mistakes to avoid

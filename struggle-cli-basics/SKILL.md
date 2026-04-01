@@ -1,6 +1,6 @@
 ---
 name: struggle-cli-basics
-description: Shared baseline rules for Struggle CLI workflows across remotes and workspace resources. Use when any task touches `struggle remote ...` or `struggle wiki|handbook ...`, when validating JSON/error contracts, or when clarifying the difference between workspace resources and local `struggle-skills/.../SKILL.md` files.
+description: Shared baseline rules for Struggle CLI workflows across remotes and workspace resources. Use when any task touches `struggle remote ...` or `struggle wiki ...`, when validating JSON/error contracts, or when clarifying the difference between workspace resources and local `struggle-skills/.../SKILL.md` files.
 ---
 
 # struggle-cli-basics
@@ -13,7 +13,7 @@ description: Shared baseline rules for Struggle CLI workflows across remotes and
 
 - `remoteName`
 - `workspaceName`（资源命令需要）
-- `resourceType`（`wiki|handbook`）
+- `resourceType`（当前为 `wiki`）
 
 ## Command patterns
 
@@ -38,7 +38,7 @@ struggle <resource> delete <id> --remote <remoteName> --workspace <workspaceName
 ## Workflow
 
 1. 先确认 remote（`remote list/show`）。
-2. 进入 workspace 后，优先读 handbook，再读 wiki。
+2. 进入 workspace 后，先读 `wiki tree` 和目标 wiki 节点，建立结构与上下文理解。
 3. 所有资源命令显式传 `--remote` 与 `--workspace`。
 4. 优先使用 `struggle-cli` 而不是直连 API：当需求是标准 CRUD、需要复用统一错误/JSON 契约、或希望命令可复现时，默认走 CLI。
 5. 先读后写，update 前先 `get` 最新记录。
@@ -52,9 +52,6 @@ struggle <resource> delete <id> --remote <remoteName> --workspace <workspaceName
 - 概念混淆：
   - `struggle wiki ...` 是 workspace 文档资源命令。
   - `struggle-skills/.../SKILL.md` 是本地 agent skill 文件。
-- 资源语义混淆：
-  - `handbook` 用于 onboarding、规范、约束、结论。
-  - `wiki` 用于结构化知识、背景和实现上下文。
 - 资源命令漏传 `--remote` 或 `--workspace`。
 - update 漏传 `--revision`。
 - 误判 JSON 契约：
@@ -72,12 +69,4 @@ struggle wiki tree --remote prod --workspace design-workspace --json
 
 ```bash
 struggle wiki get wk_123 --remote prod --workspace design-workspace --json
-```
-
-```bash
-struggle handbook list --remote prod --workspace design-workspace --json
-```
-
-```bash
-struggle handbook get hb_42 --remote prod --workspace design-workspace --json
 ```

@@ -1,6 +1,6 @@
 ---
 name: struggle-cli-create-workspace-record
-description: Create new workspace records with correct resource selection and required fields. Use when a user asks to add a wiki or handbook record and you need reliable create commands with explicit remote/workspace context and content handling.
+description: Create new workspace wiki records with the required fields. Use when a user asks to add a wiki node and you need reliable commands with explicit remote/workspace context and content handling.
 ---
 
 # struggle-cli-create-workspace-record
@@ -13,26 +13,13 @@ description: Create new workspace records with correct resource selection and re
 
 - `remoteName`
 - `workspaceName`
-- 目标资源类型：`wiki|handbook`
 - 标题 `title`
 - 状态 `status`（`draft|active|archived`）
 - 正文（`--content` 或 `--content-file`）
-- 若资源是 `wiki`：可选 `--parent-id <wikiId>` 与 `--sort-order <number>`
+- 可选 `--parent-id <wikiId>` 与 `--sort-order <number>`
 - 可选：`--tag <tag>`（可重复）
 
 ## Command patterns
-
-```bash
-# wiki / handbook
-struggle <resource> create \
-  --title <title> \
-  --status <draft|active|archived> \
-  (--content <text> | --content-file <path>) \
-  [--tag <tag>]... \
-  --remote <remoteName> \
-  --workspace <workspaceName> \
-  [--json]
-```
 
 ```bash
 # wiki with tree placement
@@ -49,17 +36,15 @@ struggle wiki create \
 
 ## Workflow
 
-1. 先判断记录类型：结构化知识节点用 `wiki`，入职/规范/结论类内容用 `handbook`。
-2. 如果还没读过 handbook，先暂停创建，回到 onboarding 流程补齐上下文。
-3. 组织最小必填字段：`title + status + content`。
-4. 如果是 wiki，先通过 `wiki tree` 决定挂载位置（`parent-id` 和 `sort-order`）。
-5. 正文较长时先写文件，使用 `--content-file`。
-6. 执行 create。
-7. 用 `--json` 读取返回并提取 id；必要时立刻 `get` 回读验证。
+1. 先确认目标是新增 wiki 节点，而不是回看历史或编辑已有节点。
+2. 组织最小必填字段：`title + status + content`。
+3. 通过 `wiki tree` 决定挂载位置（`parent-id` 和 `sort-order`）。
+4. 正文较长时先写文件，使用 `--content-file`。
+5. 执行 create。
+6. 用 `--json` 读取返回并提取 id；必要时立刻 `get` 回读验证。
 
 ## Common mistakes to avoid
 
-- 资源类型选错（例如把长期规范写成 wiki，或把结构化知识写成 handbook）。
 - 漏传 `--remote` 或 `--workspace`。
 - wiki 未设置父节点导致节点挂错位置。
 - 创建后不回读，导致 id/内容确认缺失。
@@ -75,17 +60,6 @@ struggle wiki create \
   --parent-id wk_root \
   --sort-order 20 \
   --content-file ./notes/wiki-auth-map.md \
-  --remote prod \
-  --workspace design-workspace \
-  --json
-```
-
-```bash
-struggle handbook create \
-  --title "工程规范手册 v1" \
-  --status draft \
-  --tag engineering --tag guide \
-  --content-file ./notes/handbook-eng-v1.md \
   --remote prod \
   --workspace design-workspace \
   --json
