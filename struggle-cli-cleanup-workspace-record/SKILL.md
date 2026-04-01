@@ -12,8 +12,8 @@ description: Clean up workspace records through safe delete or archive-oriented 
 ## Required inputs
 
 - `remoteName`
-- `workspaceId`
-- 资源类型与 `recordId`（`wiki|worklog|handbook`）
+- `workspaceName`
+- 资源类型与 `recordId`（`wiki|handbook`）
 - 清理策略：直接删除，或改状态到 `archived`
 
 ## Command patterns
@@ -42,6 +42,7 @@ struggle <resource> list --remote <remoteName> --workspace <workspaceName> [--js
 4. 执行操作并使用 `--json` 获取结构化结果。
 5. 删除后用 `list/get` 复核结果。
 6. 把清理结果回报给用户（删除了什么、剩余什么）。
+7. 如果用户想回看历史而不是清理内容，优先引导到 hub 的 `activity`，不要误删记录。
 
 ## Common mistakes to avoid
 
@@ -50,18 +51,19 @@ struggle <resource> list --remote <remoteName> --workspace <workspaceName> [--js
 - 删除前未让用户确认是否允许保留为 archived。
 - 删除 wiki 父节点前不检查子节点。
 - 删除后不做验证。
+- 把 `activity` 时间线和内容资源删除混为一谈。
 
 ## Examples
-
-```bash
-# 直接删除
-struggle worklog get wl_77 --remote prod --workspace design-workspace --json
-struggle worklog delete wl_77 --remote prod --workspace design-workspace --json
-struggle worklog list --remote prod --workspace design-workspace --json
-```
 
 ```bash
 # 收口而非删除
 struggle wiki get wk_2 --remote prod --workspace design-workspace --json
 struggle wiki update wk_2 --revision 11 --status archived --content-file ./notes/wk2-archive.md --remote prod --workspace design-workspace --json
+```
+
+```bash
+# 直接删除
+struggle handbook get hb_77 --remote prod --workspace design-workspace --json
+struggle handbook delete hb_77 --remote prod --workspace design-workspace --json
+struggle handbook list --remote prod --workspace design-workspace --json
 ```

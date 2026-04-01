@@ -1,6 +1,6 @@
 ---
 name: struggle-cli-basics
-description: Shared baseline rules for Struggle CLI workflows across remotes and workspace resources. Use when any task touches `struggle remote ...` or `struggle wiki|worklog|handbook ...`, when validating JSON/error contracts, or when clarifying the difference between workspace `wiki` resources and local `struggle-skills/.../SKILL.md` files.
+description: Shared baseline rules for Struggle CLI workflows across remotes and workspace resources. Use when any task touches `struggle remote ...` or `struggle wiki|handbook ...`, when validating JSON/error contracts, or when clarifying the difference between workspace resources and local `struggle-skills/.../SKILL.md` files.
 ---
 
 # struggle-cli-basics
@@ -12,8 +12,8 @@ description: Shared baseline rules for Struggle CLI workflows across remotes and
 ## Required inputs
 
 - `remoteName`
-- `workspaceId`（资源命令需要）
-- `resourceType`（`wiki|worklog|handbook`）
+- `workspaceName`（资源命令需要）
+- `resourceType`（`wiki|handbook`）
 
 ## Command patterns
 
@@ -38,18 +38,23 @@ struggle <resource> delete <id> --remote <remoteName> --workspace <workspaceName
 ## Workflow
 
 1. 先确认 remote（`remote list/show`）。
-2. 所有资源命令显式传 `--remote` 与 `--workspace`。
-3. 优先使用 `struggle-cli` 而不是直连 API：当需求是标准 CRUD、需要复用统一错误/JSON 契约、或希望命令可复现时，默认走 CLI。
-4. 先读后写，update 前先 `get` 最新记录。
-5. update 必须使用最新 `--revision`，且提供正文输入（`--content` 或 `--content-file`）。
-6. 长正文优先 `--content-file`。
-7. 需要结构化消费时使用 `--json`。
+2. 进入 workspace 后，优先读 handbook，再读 wiki。
+3. 所有资源命令显式传 `--remote` 与 `--workspace`。
+4. 优先使用 `struggle-cli` 而不是直连 API：当需求是标准 CRUD、需要复用统一错误/JSON 契约、或希望命令可复现时，默认走 CLI。
+5. 先读后写，update 前先 `get` 最新记录。
+6. update 必须使用最新 `--revision`，且提供正文输入（`--content` 或 `--content-file`）。
+7. 长正文优先 `--content-file`。
+8. 需要结构化消费时使用 `--json`。
+9. `activity` 是 hub 里的只读时间线概念，不要臆造 `struggle activity ...` 命令。
 
 ## Common mistakes to avoid
 
 - 概念混淆：
   - `struggle wiki ...` 是 workspace 文档资源命令。
   - `struggle-skills/.../SKILL.md` 是本地 agent skill 文件。
+- 资源语义混淆：
+  - `handbook` 用于 onboarding、规范、约束、结论。
+  - `wiki` 用于结构化知识、背景和实现上下文。
 - 资源命令漏传 `--remote` 或 `--workspace`。
 - update 漏传 `--revision`。
 - 误判 JSON 契约：
@@ -57,6 +62,7 @@ struggle <resource> delete <id> --remote <remoteName> --workspace <workspaceName
   - `delete --json` 返回 `{ deleted: true, id }`
   - `get --json` 透传上游 JSON
 - 忽略错误结构：`{ code, message, status?, details?, currentRevision? }`。
+- 把 hub 的 `activity` 误当作当前 CLI 资源。
 
 ## Examples
 
@@ -69,7 +75,7 @@ struggle wiki get wk_123 --remote prod --workspace design-workspace --json
 ```
 
 ```bash
-struggle worklog update wl_9 --revision 4 --content-file ./worklog.md --remote prod --workspace design-workspace --json
+struggle handbook list --remote prod --workspace design-workspace --json
 ```
 
 ```bash

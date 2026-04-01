@@ -1,6 +1,6 @@
 ---
 name: struggle-cli-update-workspace-record
-description: Update existing workspace records safely under optimistic concurrency constraints. Use when changing title/status/tags/content/logged-at for wiki/worklog/handbook records and you must fetch latest revision before issuing `update --revision`.
+description: Update existing workspace records safely under optimistic concurrency constraints. Use when changing title, status, tags, content, or wiki placement for wiki or handbook records and you must fetch latest revision before issuing `update --revision`.
 ---
 
 # struggle-cli-update-workspace-record
@@ -12,12 +12,11 @@ description: Update existing workspace records safely under optimistic concurren
 ## Required inputs
 
 - `remoteName`
-- `workspaceId`
+- `workspaceName`
 - 资源类型与 `recordId`
 - 最新 `revision`
 - 新正文（`--content` 或 `--content-file`）
 - 可选：`--title`、`--status`、`--tag`
-- `worklog` 可选：`--logged-at`
 - `wiki` 可选：`--parent-id`、`--sort-order`
 
 ## Command patterns
@@ -27,20 +26,11 @@ struggle <resource> get <id> --remote <remoteName> --workspace <workspaceName> -
 ```
 
 ```bash
-# handbook/worklog/wiki generic update
+# handbook/wiki generic update
 struggle <resource> update <id> \
   --revision <n> \
   (--content <text> | --content-file <path>) \
   [--title <title>] [--status <draft|active|archived>] [--tag <tag>]... \
-  --remote <remoteName> --workspace <workspaceName> [--json]
-```
-
-```bash
-# worklog extra field
-struggle worklog update <id> \
-  --revision <n> \
-  (--content <text> | --content-file <path>) \
-  [--title <title>] [--status <draft|active|archived>] [--logged-at <datetime>] [--tag <tag>]... \
   --remote <remoteName> --workspace <workspaceName> [--json]
 ```
 
@@ -61,6 +51,7 @@ struggle wiki update <id> \
 4. 执行 `update --revision <latest>`。
 5. 若失败且包含 revision 冲突信息，重新 `get` 最新记录后再更新。
 6. 更新后 `get` 一次确认结果。
+7. 如果需求只是“回看最近发生了什么”，不要改记录，回 hub 的 `activity` 时间线确认。
 
 ## Common mistakes to avoid
 
@@ -69,6 +60,7 @@ struggle wiki update <id> \
 - update 不传正文（当前命令要求正文输入）。
 - revision 冲突后直接重试旧命令而不先刷新记录。
 - wiki 调整节点时忘记同步 `sort-order`，导致顺序错乱。
+- 把历史审计需求误当作记录更新需求。
 
 ## Examples
 
@@ -81,17 +73,6 @@ struggle wiki update wk_1 \
   --parent-id wk_auth \
   --sort-order 30 \
   --content-file ./notes/wiki-auth-map-v2.md \
-  --remote prod \
-  --workspace design-workspace \
-  --json
-```
-
-```bash
-struggle worklog get wl_1024 --remote prod --workspace design-workspace --json
-struggle worklog update wl_1024 \
-  --revision 3 \
-  --logged-at 2026-03-26T10:00:00Z \
-  --content-file ./notes/wl-login-timeout-v2.md \
   --remote prod \
   --workspace design-workspace \
   --json
