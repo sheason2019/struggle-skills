@@ -1,19 +1,19 @@
 ---
 name: struggle-cli-cleanup-workspace-record
-description: Clean up workspace records through safe delete or archive-oriented closeout workflows. Use when removing stale records, deciding between delete vs `status=archived`, verifying cleanup results, and preventing wrong-type or wrong-workspace deletion.
+description: Clean up workspace wiki nodes through safe delete or archive-oriented closeout workflows. Use when removing stale wiki content, deciding between delete vs `status=archived`, verifying cleanup results, and preventing wrong-workspace deletion.
 ---
 
 # struggle-cli-cleanup-workspace-record
 
 ## What this skill is for
 
-执行删除、收尾和清理动作，减少误删风险，并在操作后验证结果。
+执行 wiki 删除、收尾和清理动作，减少误删风险，并在操作后验证结果。
 
 ## Required inputs
 
 - `remoteName`
 - `workspaceName`
-- 资源类型与 `recordId`（当前为 `wiki`）
+- `wikiId`
 - 清理策略：直接删除，或改状态到 `archived`
 
 ## Command patterns

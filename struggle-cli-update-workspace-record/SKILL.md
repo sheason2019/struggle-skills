@@ -1,19 +1,19 @@
 ---
 name: struggle-cli-update-workspace-record
-description: Update workspace wiki records safely under optimistic concurrency constraints. Use when changing title, status, tags, content, or wiki placement and you must fetch the latest revision before issuing `update --revision`.
+description: Update workspace wiki nodes safely under optimistic concurrency constraints. Use when changing title, status, tags, content, or wiki placement and you must fetch the latest revision before issuing `update --revision`.
 ---
 
 # struggle-cli-update-workspace-record
 
 ## What this skill is for
 
-在不破坏 revision 契约的前提下安全更新 workspace 记录。
+在不破坏 revision 契约的前提下安全更新 workspace wiki 节点。
 
 ## Required inputs
 
 - `remoteName`
 - `workspaceName`
-- 资源类型与 `recordId`
+- `wikiId`
 - 最新 `revision`
 - 新正文（`--content` 或 `--content-file`）
 - 可选：`--title`、`--status`、`--tag`

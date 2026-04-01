@@ -1,6 +1,6 @@
 ---
 name: struggle-cli-read-workspace-context
-description: Read workspace context from wikis before analysis or write actions. Use when summarizing current state, checking whether a record exists, collecting revision values for updates, or grounding recommendations in actual workspace data.
+description: Read workspace context from wikis before analysis or write actions. Use when summarizing current wiki state, checking whether a node exists, collecting revision values for updates, or grounding recommendations in actual workspace data.
 ---
 
 # struggle-cli-read-workspace-context
@@ -13,7 +13,7 @@ description: Read workspace context from wikis before analysis or write actions.
 
 - `remoteName`
 - `workspaceName`
-- 资源类型与目标 id（仅 `get` 时需要）
+- `wikiId`（仅 `get` 时需要）
 
 ## Command patterns
 
@@ -32,7 +32,7 @@ struggle wiki get <wikiId> --remote <remoteName> --workspace <workspaceName> [--
 
 1. 先确认 remote。
 2. 读取 `wiki tree` 与 `wiki list`，理解结构化知识和节点关系。
-3. 锁定目标记录后执行 `get` 读取完整内容。
+3. 锁定目标 wiki 节点后执行 `get` 读取完整内容。
 4. 若需要确认最近发生过什么，到 hub 的 `activity` 时间线回看；不要假设 CLI 提供 `activity` 命令。
 5. 程序化分析或后续自动流程使用 `--json`。
 6. 把读取结论作为后续 create/update/delete 的唯一依据。
@@ -40,7 +40,7 @@ struggle wiki get <wikiId> --remote <remoteName> --workspace <workspaceName> [--
 ## Common mistakes to avoid
 
 - 只读一条记录就下全局结论，跳过列表上下文。
-- 写操作前不读取目标记录详情。
+- 写操作前不读取目标 wiki 节点详情。
 - 忘记 `--json` 导致解析不稳定。
 - 跳过 `wiki tree`，导致父子节点关系理解错误。
 - 把 hub 的 `activity` 当成 CLI 可读资源。
