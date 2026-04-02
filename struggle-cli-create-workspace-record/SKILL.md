@@ -1,7 +1,7 @@
 ---
 name: struggle-cli-create-workspace-record
 description: Create new workspace wiki nodes with the required fields. Use when a user asks to add wiki content and you need reliable commands with explicit remote/workspace context and content handling.
-version: 0.1.0
+version: 0.1.1
 ---
 
 # struggle-cli-create-workspace-record
@@ -49,7 +49,7 @@ struggle wiki create \
 - 漏传 `--remote` 或 `--workspace`。
 - wiki 未设置父节点导致节点挂错位置。
 - 创建后不回读，导致 id/内容确认缺失。
-- 把“想回看历史事件”的需求误实现成新建记录；这类需求应优先看 hub 的 `activity`。
+- 把“想回看历史事件”的需求误实现成新建 wiki；这类需求应优先看 `struggle activity list` 或 hub 的 `activity`。
 
 ## Examples
 

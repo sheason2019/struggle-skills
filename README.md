@@ -13,11 +13,12 @@ These skills are aligned with the current `struggle-ai` capability surface:
 
 - `struggle remote ...` for remote setup and verification
 - `struggle wiki ...` for structured workspace knowledge
+- `struggle activity ...` for reading workspace activity and recording manual milestone updates
 
 Important limits:
 
-- `activity` exists in Struggle Hub as a read-only timeline, but it is not exposed as a `struggle-cli` command
-- These local skills should not instruct agents to use any workspace resource other than `wiki`
+- Hub Web remains the only UI surface for browsing the full activity timeline
+- Activity writes are fleet-token driven and should go through `struggle activity create/update`
 
 ## Directory contract
 

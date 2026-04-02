@@ -1,14 +1,14 @@
 ---
 name: struggle-cli-basics
-description: Shared baseline rules for Struggle CLI workflows across remotes and wiki resources. Use when any task touches `struggle remote ...` or `struggle wiki ...`, when validating JSON/error contracts, or when clarifying the difference between workspace wiki content and local `struggle-skills/.../SKILL.md` files.
-version: 0.1.0
+description: Shared baseline rules for Struggle CLI workflows across remotes, wiki resources, and activity commands. Use when any task touches `struggle remote ...`, `struggle wiki ...`, or `struggle activity ...`, when validating JSON/error contracts, or when clarifying the difference between workspace content and local `struggle-skills/.../SKILL.md` files.
+version: 0.1.1
 ---
 
 # struggle-cli-basics
 
 ## What this skill is for
 
-沉淀 `struggle-cli` 的共享约束，给其他 workflow skill 提供统一底层规则。当前 workspace 内容资源只允许使用 `wiki`。
+沉淀 `struggle-cli` 的共享约束，给其他 workflow skill 提供统一底层规则。当前 workspace 内容资源命令包括 `wiki` 与 `activity`。
 
 ## Required inputs
 
@@ -31,6 +31,11 @@ struggle wiki get <id> --remote <remoteName> --workspace <workspaceName> [--json
 struggle wiki create ... --remote <remoteName> --workspace <workspaceName> [--json]
 struggle wiki update <id> --revision <n> ... --remote <remoteName> --workspace <workspaceName> [--json]
 struggle wiki delete <id> --remote <remoteName> --workspace <workspaceName> [--json]
+
+# activity
+struggle activity list --remote <remoteName> --workspace <workspaceName> [--json]
+struggle activity create --summary <text> [--details <text>|--details-file <path>] --remote <remoteName> --workspace <workspaceName> [--json]
+struggle activity update <activityId> [--summary <text>] [--details <text>|--details-file <path>] --remote <remoteName> --workspace <workspaceName> [--json]
 ```
 
 ## Workflow
@@ -43,7 +48,7 @@ struggle wiki delete <id> --remote <remoteName> --workspace <workspaceName> [--j
 6. update 必须使用最新 `--revision`，且提供正文输入（`--content` 或 `--content-file`）。
 7. 长正文优先 `--content-file`。
 8. 需要结构化消费时使用 `--json`。
-9. `activity` 是 hub 里的只读时间线概念，不要臆造 `struggle activity ...` 命令。
+9. 回看最近发生过什么时，优先 `struggle activity list` 或 hub 的 Activity 页面，不要把历史查看误做成 wiki 写操作。
 
 ## Common mistakes to avoid
 
@@ -57,7 +62,7 @@ struggle wiki delete <id> --remote <remoteName> --workspace <workspaceName> [--j
   - `delete --json` 返回 `{ deleted: true, id }`
   - `get --json` 透传上游 JSON
 - 忽略错误结构：`{ code, message, status?, details?, currentRevision? }`。
-- 把 hub 的 `activity` 误当作当前 CLI 资源。
+- 把 `activity` 的手动里程碑记录误当成 wiki 内容。
 - 臆造 `goal/skill/experience/worklog/handbook/proposal` 等已移除命令。
 
 ## Examples

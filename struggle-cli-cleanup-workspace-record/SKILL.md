@@ -1,7 +1,7 @@
 ---
 name: struggle-cli-cleanup-workspace-record
 description: Clean up workspace wiki nodes through safe delete or archive-oriented closeout workflows. Use when removing stale wiki content, deciding between delete vs `status=archived`, verifying cleanup results, and preventing wrong-workspace deletion.
-version: 0.1.0
+version: 0.1.1
 ---
 
 # struggle-cli-cleanup-workspace-record
@@ -43,7 +43,7 @@ struggle wiki list --remote <remoteName> --workspace <workspaceName> [--json]
 4. 执行操作并使用 `--json` 获取结构化结果。
 5. 删除后用 `list/get` 复核结果。
 6. 把清理结果回报给用户（删除了什么、剩余什么）。
-7. 如果用户想回看历史而不是清理内容，优先引导到 hub 的 `activity`，不要误删记录。
+7. 如果用户想回看历史而不是清理内容，优先引导到 `struggle activity list` 或 hub 的 `activity`，不要误删记录。
 
 ## Common mistakes to avoid
 

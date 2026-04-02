@@ -1,7 +1,7 @@
 ---
 name: struggle-cli-update-workspace-record
 description: Update workspace wiki nodes safely under optimistic concurrency constraints. Use when changing title, status, tags, content, or wiki placement and you must fetch the latest revision before issuing `update --revision`.
-version: 0.1.0
+version: 0.1.1
 ---
 
 # struggle-cli-update-workspace-record
@@ -43,7 +43,7 @@ struggle wiki update <id> \
 4. 执行 `update --revision <latest>`。
 5. 若失败且包含 revision 冲突信息，重新 `get` 最新记录后再更新。
 6. 更新后 `get` 一次确认结果。
-7. 如果需求只是“回看最近发生了什么”，不要改记录，回 hub 的 `activity` 时间线确认。
+7. 如果需求只是“回看最近发生了什么”，不要改记录，先用 `struggle activity list`，必要时再回 hub 的 `activity` 时间线确认。
 
 ## Common mistakes to avoid
 

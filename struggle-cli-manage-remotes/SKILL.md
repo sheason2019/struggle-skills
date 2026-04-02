@@ -1,7 +1,7 @@
 ---
 name: struggle-cli-manage-remotes
 description: Manage Struggle CLI remotes safely through list/show/add/remove workflows. Use when setting up a new environment, switching remotes, diagnosing remote misconfiguration, or cleaning unused remotes before workspace resource operations.
-version: 0.1.0
+version: 0.1.1
 ---
 
 # struggle-cli-manage-remotes
