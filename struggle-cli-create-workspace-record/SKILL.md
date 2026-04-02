@@ -1,6 +1,7 @@
 ---
 name: struggle-cli-create-workspace-record
 description: Create new workspace wiki nodes with the required fields. Use when a user asks to add wiki content and you need reliable commands with explicit remote/workspace context and content handling.
+version: 0.1.0
 ---
 
 # struggle-cli-create-workspace-record

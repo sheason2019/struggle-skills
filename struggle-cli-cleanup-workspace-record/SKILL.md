@@ -1,6 +1,7 @@
 ---
 name: struggle-cli-cleanup-workspace-record
 description: Clean up workspace wiki nodes through safe delete or archive-oriented closeout workflows. Use when removing stale wiki content, deciding between delete vs `status=archived`, verifying cleanup results, and preventing wrong-workspace deletion.
+version: 0.1.0
 ---
 
 # struggle-cli-cleanup-workspace-record

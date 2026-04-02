@@ -1,6 +1,7 @@
 ---
 name: struggle-cli-update-workspace-record
 description: Update workspace wiki nodes safely under optimistic concurrency constraints. Use when changing title, status, tags, content, or wiki placement and you must fetch the latest revision before issuing `update --revision`.
+version: 0.1.0
 ---
 
 # struggle-cli-update-workspace-record

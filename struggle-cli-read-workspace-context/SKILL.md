@@ -1,6 +1,7 @@
 ---
 name: struggle-cli-read-workspace-context
 description: Read workspace context from wikis before analysis or write actions. Use when summarizing current wiki state, checking whether a node exists, collecting revision values for updates, or grounding recommendations in actual workspace data.
+version: 0.1.0
 ---
 
 # struggle-cli-read-workspace-context

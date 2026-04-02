@@ -2,6 +2,11 @@
 
 This directory contains publishable local skills for current Struggle workflows.
 
+## Versioning
+
+- `struggle-skills/package.json` is the canonical target version source consumed by Struggle Hub setup prompts.
+- Each published `SKILL.md` also carries the same `version` in frontmatter so an installed copy can be probed locally before deciding whether to reinstall.
+
 ## Current coverage
 
 These skills are aligned with the current `struggle-ai` capability surface:
@@ -20,6 +25,7 @@ Important limits:
 - `SKILL.md` must include YAML frontmatter with at least:
   - `name`
   - `description`
+  - `version`
 
 ## Validate discoverability
 

@@ -1,6 +1,7 @@
 ---
 name: struggle-cli-basics
 description: Shared baseline rules for Struggle CLI workflows across remotes and wiki resources. Use when any task touches `struggle remote ...` or `struggle wiki ...`, when validating JSON/error contracts, or when clarifying the difference between workspace wiki content and local `struggle-skills/.../SKILL.md` files.
+version: 0.1.0
 ---
 
 # struggle-cli-basics
