@@ -1,7 +1,7 @@
 ---
 name: struggle-cli-update-workspace-record
 description: Update workspace wiki nodes safely under optimistic concurrency constraints. Use when changing title, status, tags, content, or wiki placement and you must fetch the latest revision before issuing `update --revision`.
-version: 0.1.1
+version: 0.1.2
 ---
 
 # struggle-cli-update-workspace-record
@@ -17,7 +17,7 @@ version: 0.1.1
 - `wikiId`
 - 最新 `revision`
 - 新正文（`--content` 或 `--content-file`）
-- 可选：`--title`、`--status`、`--tag`
+- 可选：`--title`、`--summary`、`--status`
 - `wiki` 可选：`--parent-id`、`--sort-order`
 
 ## Command patterns
@@ -31,7 +31,7 @@ struggle wiki get <id> --remote <remoteName> --workspace <workspaceName> --json
 struggle wiki update <id> \
   --revision <n> \
   (--content <text> | --content-file <path>) \
-  [--title <title>] [--status <draft|active|archived>] [--parent-id <wikiId>] [--sort-order <number>] [--tag <tag>]... \
+  [--title <title>] [--summary <summary>] [--status <active|archived>] [--parent-id <wikiId>] [--sort-order <number>] \
   --remote <remoteName> --workspace <workspaceName> [--json]
 ```
 
@@ -39,11 +39,12 @@ struggle wiki update <id> \
 
 1. 先 `get --json` 读取当前记录。
 2. 取最新 `revision` 与当前内容。
-3. 仅修改目标字段，其他字段保持不变。
-4. 执行 `update --revision <latest>`。
-5. 若失败且包含 revision 冲突信息，重新 `get` 最新记录后再更新。
-6. 更新后 `get` 一次确认结果。
-7. 如果需求只是“回看最近发生了什么”，不要改记录，先用 `struggle activity list`，必要时再回 hub 的 `activity` 时间线确认。
+3. 结合 `wiki tree` 的编号和目录位置，先判断应更新当前节点、父节点还是同级其它节点，避免误改错章。
+4. 仅修改目标字段，其他字段保持不变。
+5. 执行 `update --revision <latest>`。
+6. 若失败且包含 revision 冲突信息，重新 `get` 最新记录后再更新。
+7. 更新后 `get` 一次确认结果。
+8. 如果需求只是“回看最近发生了什么”，不要改记录，先用 `struggle activity list`，必要时再回 hub 的 `activity` 时间线确认。
 
 ## Common mistakes to avoid
 
@@ -51,7 +52,9 @@ struggle wiki update <id> \
 - update 漏传 `--revision`。
 - update 不传正文（当前命令要求正文输入）。
 - revision 冲突后直接重试旧命令而不先刷新记录。
+- 把 root 当成普通章节移动或改 parent；root 应只被读取或改内容，不应按普通节点调整层级。
 - wiki 调整节点时忘记同步 `sort-order`，导致顺序错乱。
+- 继续使用 `draft`、`tag` 等旧 wiki 心智。
 - 把历史审计需求误当作记录更新需求。
 
 ## Examples
@@ -61,6 +64,7 @@ struggle wiki get wk_1 --remote prod --workspace design-workspace --json
 struggle wiki update wk_1 \
   --revision 8 \
   --title "登录模块知识地图（修订）" \
+  --summary "登录模块的结构、边界与运行约束" \
   --status active \
   --parent-id wk_auth \
   --sort-order 30 \

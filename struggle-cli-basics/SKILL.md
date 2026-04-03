@@ -1,7 +1,7 @@
 ---
 name: struggle-cli-basics
 description: Shared baseline rules for Struggle CLI workflows across remotes, wiki resources, and activity commands. Use when any task touches `struggle remote ...`, `struggle wiki ...`, or `struggle activity ...`, when validating JSON/error contracts, or when clarifying the difference between workspace content and local `struggle-skills/.../SKILL.md` files.
-version: 0.1.1
+version: 0.1.2
 ---
 
 # struggle-cli-basics
@@ -42,13 +42,18 @@ struggle activity update <activityId> [--summary <text>] [--details <text>|--det
 
 1. 先确认 remote（`remote list/show`）。
 2. 进入 workspace 后，先读 `wiki tree` 和目标 wiki 节点，建立结构与上下文理解。
-3. 所有 wiki 命令显式传 `--remote` 与 `--workspace`。
-4. 优先使用 `struggle-cli` 而不是直连 API：当需求是标准 CRUD、需要复用统一错误/JSON 契约、或希望命令可复现时，默认走 CLI。
-5. 先读后写，update 前先 `get` 最新记录。
-6. update 必须使用最新 `--revision`，且提供正文输入（`--content` 或 `--content-file`）。
-7. 长正文优先 `--content-file`。
-8. 需要结构化消费时使用 `--json`。
-9. 回看最近发生过什么时，优先 `struggle activity list` 或 hub 的 Activity 页面，不要把历史查看误做成 wiki 写操作。
+3. 读取 wiki 时按新的目录语义理解结构：
+   - 根 wiki 会显示出来，但不参与章节编号。
+   - 根 wiki 的直接子节点从 `1`、`2` 开始编号。
+   - 更深层节点按 `1.1`、`1.2` 继续编号。
+   - human output 里的“根节点 / 顶层章节 / 上级章节”比 `parentId` 更重要。
+4. 所有 wiki 命令显式传 `--remote` 与 `--workspace`。
+5. 优先使用 `struggle-cli` 而不是直连 API：当需求是标准 CRUD、需要复用统一错误/JSON 契约、或希望命令可复现时，默认走 CLI。
+6. 先读后写，update 前先 `get` 最新记录。
+7. update 必须使用最新 `--revision`，且提供正文输入（`--content` 或 `--content-file`）。
+8. 长正文优先 `--content-file`。
+9. 需要结构化消费时使用 `--json`。
+10. 回看最近发生过什么时，优先 `struggle activity list` 或 hub 的 Activity 页面，不要把历史查看误做成 wiki 写操作。
 
 ## Common mistakes to avoid
 
@@ -61,8 +66,12 @@ struggle activity update <activityId> [--summary <text>] [--details <text>|--det
   - `list --json` 返回 `{ items: [...] }`
   - `delete --json` 返回 `{ deleted: true, id }`
   - `get --json` 透传上游 JSON
+- 把 root 当成普通章节处理：
+  - root 需要显示并阅读，但不参与章节编号。
+  - 新建顶层章节时，优先挂到 root 下，而不是创建新的空 parent 节点。
 - 忽略错误结构：`{ code, message, status?, details?, currentRevision? }`。
 - 把 `activity` 的手动里程碑记录误当成 wiki 内容。
+- 臆造 `draft`、`tag`、`--root` 等旧 wiki 能力；当前只应使用 `active|archived`，并按目录树理解 parent。
 - 臆造 `goal/skill/experience/worklog/handbook/proposal` 等已移除命令。
 
 ## Examples

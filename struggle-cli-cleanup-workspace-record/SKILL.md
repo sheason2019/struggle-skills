@@ -1,7 +1,7 @@
 ---
 name: struggle-cli-cleanup-workspace-record
 description: Clean up workspace wiki nodes through safe delete or archive-oriented closeout workflows. Use when removing stale wiki content, deciding between delete vs `status=archived`, verifying cleanup results, and preventing wrong-workspace deletion.
-version: 0.1.1
+version: 0.1.2
 ---
 
 # struggle-cli-cleanup-workspace-record
@@ -39,17 +39,20 @@ struggle wiki list --remote <remoteName> --workspace <workspaceName> [--json]
 2. 判断删除还是状态收口：
    - 需要保留历史时优先 `status=archived`。
    - 明确无需保留时再 `delete`。
-3. 对 wiki 节点先检查是否有子节点，避免误删树结构。
-4. 执行操作并使用 `--json` 获取结构化结果。
-5. 删除后用 `list/get` 复核结果。
-6. 把清理结果回报给用户（删除了什么、剩余什么）。
-7. 如果用户想回看历史而不是清理内容，优先引导到 `struggle activity list` 或 hub 的 `activity`，不要误删记录。
+3. 先看 `wiki tree`，确认该节点是 root、顶层章节还是下级章节。
+4. root 不允许删除；如果目标是 root，只能改内容或保留。
+5. 对 wiki 节点先检查是否有子节点，避免误删树结构。
+6. 执行操作并使用 `--json` 获取结构化结果。
+7. 删除后用 `list/get` 复核结果。
+8. 把清理结果回报给用户（删除了什么、剩余什么）。
+9. 如果用户想回看历史而不是清理内容，优先引导到 `struggle activity list` 或 hub 的 `activity`，不要误删记录。
 
 ## Common mistakes to avoid
 
 - 未确认资源类型就直接删。
 - 在错误 workspace 下执行 delete。
 - 删除前未让用户确认是否允许保留为 archived。
+- 试图删除 root，或在没看章节树的情况下删除顶层节点。
 - 删除 wiki 父节点前不检查子节点。
 - 删除后不做验证。
 - 把 `activity` 时间线和内容资源删除混为一谈。
