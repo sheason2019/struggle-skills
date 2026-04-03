@@ -19,6 +19,7 @@ Important limits:
 
 - Hub Web remains the only UI surface for browsing the full activity timeline
 - Activity writes are fleet-token driven and should go through `struggle activity create/update`
+- Wiki edits no longer auto-create activity records; agents should write milestone activity explicitly
 
 ## Directory contract
 
